@@ -64,5 +64,4 @@ export async function invokeAction(action, options) {
   }
 }
 
-// Execute Commander.js commands
 program.parse(process.argv);
