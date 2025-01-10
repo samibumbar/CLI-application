@@ -79,7 +79,7 @@ Replace `<contact-id>` with the ID of the contact you want to delete.
 
 ### 1. Contact List Example
 
-![Contact List](https://monosnap.com/file/O2xN3h62JXtfYu46S5PWx3qcm7CX4W)
+![Contact List] (https://monosnap.com/file/O2xN3h62JXtfYu46S5PWx3qcm7CX4W)
 
 ### 2. Adding a New Contact
 
@@ -87,7 +87,7 @@ Replace `<contact-id>` with the ID of the contact you want to delete.
 
 ### 3. Removing a Contact
 
-![Remove Contact](https://monosnap.com/file/rWMtvXCelKbTjsIUxLs76Je7P3GBRE)
+![Remove Contact] (https://monosnap.com/file/rWMtvXCelKbTjsIUxLs76Je7P3GBRE)
 
 ## ⚙️ Project Structure
 
