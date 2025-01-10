@@ -1,10 +1,9 @@
-const fs = require("fs").promises;
-const path = require("path");
-const { v4: uuidv4 } = require("uuid");
+import { promises as fs } from "fs";
+import path from "path";
+import { v4 as uuidv4 } from "uuid";
 
-const contactsPath = path.join(__dirname, "db", "contacts.json");
+const contactsPath = path.join(path.resolve(), "db", "contacts.json");
 
-// Helper function to read and parse contacts file
 async function readContacts() {
   try {
     const data = await fs.readFile(contactsPath, "utf8");
@@ -14,7 +13,6 @@ async function readContacts() {
   }
 }
 
-// Helper function to write contacts to the file
 async function writeContacts(contacts) {
   try {
     await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
@@ -23,21 +21,17 @@ async function writeContacts(contacts) {
   }
 }
 
-async function listContacts() {
+export async function listContacts() {
   return await readContacts();
 }
 
-async function getContactById(contactId) {
+export async function getContactById(contactId) {
   const contacts = await readContacts();
-  const contact = contacts.find((c) => c.id === contactId);
+  const contact = contacts.find((contact) => contact.id === contactId);
   return contact || null;
 }
 
-async function addContact(name, email, phone) {
-  if (!name || !email || !phone) {
-    throw new Error("Name, email, and phone are required.");
-  }
-
+export async function addContact(name, email, phone) {
   const contacts = await readContacts();
   const newContact = {
     id: uuidv4(),
@@ -45,14 +39,12 @@ async function addContact(name, email, phone) {
     email,
     phone,
   };
-
   contacts.push(newContact);
   await writeContacts(contacts);
-
   return newContact;
 }
 
-async function removeContact(contactId) {
+export async function removeContact(contactId) {
   const contacts = await readContacts();
   const filteredContacts = contacts.filter(
     (contact) => contact.id !== contactId
@@ -65,10 +57,3 @@ async function removeContact(contactId) {
   await writeContacts(filteredContacts);
   return filteredContacts;
 }
-
-module.exports = {
-  listContacts,
-  getContactById,
-  addContact,
-  removeContact,
-};

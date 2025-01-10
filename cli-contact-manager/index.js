@@ -1,13 +1,13 @@
-const {
+import program from "./comander-config.js";
+import {
   listContacts,
   getContactById,
   addContact,
   removeContact,
-} = require("./contacts");
-const chalk = require("chalk");
-const yargs = require("yargs");
+} from "./contacts.js";
+import chalk from "chalk";
 
-async function invokeAction({ action, id, name, email, phone }) {
+export async function invokeAction(action, options) {
   try {
     switch (action) {
       case "list":
@@ -16,7 +16,13 @@ async function invokeAction({ action, id, name, email, phone }) {
         break;
 
       case "get":
-        const contact = await getContactById(id);
+        if (!options.id) {
+          console.error(
+            chalk.red("Error: Contact ID is required for 'get' action.")
+          );
+          return;
+        }
+        const contact = await getContactById(options.id);
         if (contact) {
           console.log(chalk.green("Contact found:"), contact);
         } else {
@@ -25,82 +31,38 @@ async function invokeAction({ action, id, name, email, phone }) {
         break;
 
       case "add":
+        const { name, email, phone } = options;
+        if (!name || !email || !phone) {
+          console.error(
+            chalk.red(
+              "Error: Name, email, and phone are required for 'add' action."
+            )
+          );
+          return;
+        }
         const newContact = await addContact(name, email, phone);
         console.log(chalk.green("Contact added successfully!"), newContact);
         break;
 
       case "remove":
-        const updatedContacts = await removeContact(id);
+        if (!options.id) {
+          console.error(
+            chalk.red("Error: Contact ID is required for 'remove' action.")
+          );
+          return;
+        }
+        const updatedContacts = await removeContact(options.id);
         console.log(chalk.green("Contact removed successfully."));
         console.table(updatedContacts);
         break;
 
       default:
-        console.log(chalk.red("Unknown action type!"));
+        console.error(chalk.red("Unknown action type!"));
     }
   } catch (error) {
     console.error(chalk.red("Error:"), error.message);
   }
 }
 
-// Configure yargs
-yargs
-  .command({
-    command: "list",
-    describe: "List all contacts",
-    handler: () => invokeAction({ action: "list" }),
-  })
-  .command({
-    command: "get",
-    describe: "Get a contact by ID",
-    builder: {
-      id: {
-        describe: "Contact ID",
-        demandOption: true,
-        type: "string",
-      },
-    },
-    handler: (argv) => invokeAction({ action: "get", id: argv.id }),
-  })
-  .command({
-    command: "add",
-    describe: "Add a new contact",
-    builder: {
-      name: {
-        describe: "Contact name",
-        demandOption: true,
-        type: "string",
-      },
-      email: {
-        describe: "Contact email",
-        demandOption: true,
-        type: "string",
-      },
-      phone: {
-        describe: "Contact phone",
-        demandOption: true,
-        type: "string",
-      },
-    },
-    handler: (argv) =>
-      invokeAction({
-        action: "add",
-        name: argv.name,
-        email: argv.email,
-        phone: argv.phone,
-      }),
-  })
-  .command({
-    command: "remove",
-    describe: "Remove a contact by ID",
-    builder: {
-      id: {
-        describe: "Contact ID",
-        demandOption: true,
-        type: "string",
-      },
-    },
-    handler: (argv) => invokeAction({ action: "remove", id: argv.id }),
-  })
-  .demandCommand(1, chalk.red("You need to specify a valid action."))
-  .help().argv;
+// Execute Commander.js commands
+program.parse(process.argv);
