@@ -10,6 +10,19 @@ Manage your contacts easily with this Command Line Interface (CLI) application! 
 - ❌ **Remove contacts by ID**
 - ✅ **User-friendly CLI with helpful prompts**
 
+---
+
+## 🛠️ Built With
+
+This project was developed using:
+
+- **Node.js** - For running the CLI application.
+- **Commander.js** - To manage command-line functionality and arguments.
+- **UUID** - For generating unique IDs for each contact.
+- **Chalk** - To provide colorful output in the terminal.
+
+---
+
 ## 🚀 Getting Started
 
 Follow these steps to get the application up and running:
